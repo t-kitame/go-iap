@@ -82,7 +82,7 @@ func HandleError(status int) error {
 		}
 	}
 
-	return fmt.Errorf("status %d: %w", status, e)
+	return fmt.Errorf("status %d: %v", status, e)
 }
 
 // New creates a client object
@@ -125,7 +125,7 @@ func (c *Client) Verify(ctx context.Context, reqBody IAPRequest, result interfac
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode >= 500 {
-		return fmt.Errorf("Received http status code %d from the App Store: %w", resp.StatusCode, ErrAppStoreServer)
+		return fmt.Errorf("Received http status code %d from the App Store: %v", resp.StatusCode, ErrAppStoreServer)
 	}
 	return c.parseResponse(resp, result, ctx, reqBody)
 }
@@ -166,7 +166,7 @@ func (c *Client) parseResponse(resp *http.Response, result interface{}, ctx cont
 		}
 		defer resp.Body.Close()
 		if resp.StatusCode >= 500 {
-			return fmt.Errorf("Received http status code %d from the App Store Sandbox: %w", resp.StatusCode, ErrAppStoreServer)
+			return fmt.Errorf("Received http status code %d from the App Store Sandbox: %v", resp.StatusCode, ErrAppStoreServer)
 		}
 
 		return json.NewDecoder(resp.Body).Decode(result)

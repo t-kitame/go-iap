@@ -84,12 +84,13 @@ func TestHandleError(t *testing.T) {
 		t.Run(v.name, func(t *testing.T) {
 			out := HandleError(v.in)
 
-			if !errors.Is(out, v.out) {
+			if reflect.TypeOf(out) != reflect.TypeOf(v.out) {
 				t.Errorf("input: %d\ngot: %v\nwant: %v\n", v.in, out, v.out)
 			}
 		})
 	}
 }
+
 
 func TestNew(t *testing.T) {
 	expected := &Client{
@@ -274,7 +275,7 @@ func TestHttpStatusErrors(t *testing.T) {
 
 			ctx := context.Background()
 			err := client.Verify(ctx, req, result)
-			if !errors.Is(err, tc.err) {
+			if reflect.TypeOf(err) !=  reflect.TypeOf(tc.err) {
 				t.Errorf("expected error to be not nil since the sandbox is not responding")
 			}
 		})
