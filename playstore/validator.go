@@ -15,7 +15,7 @@ import (
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	androidpublisher "google.golang.org/api/androidpublisher/v3"
+	"google.golang.org/api/androidpublisher/v3"
 )
 
 //go:generate mockgen  -destination=mocks/playstore.go -package=mocks github.com/awa/go-iap/playstore IABProduct,IABSubscription,IABSubscriptionV2,IABMonetization
@@ -324,4 +324,26 @@ func VerifySignature(base64EncodedPublicKey string, receipt []byte, signature st
 	}
 
 	return true, nil
+}
+
+// GetOrder reads order details for a single order.
+func (c *Client) GetOrder(ctx context.Context,
+	packageName string,
+	orderId string,
+) (*androidpublisher.Order, error) {
+	ps := androidpublisher.NewOrdersService(c.service)
+	result, err := ps.Get(packageName, orderId).Context(ctx).Do()
+
+	return result, err
+}
+
+// BatchGetOrder reads order details for a list of orders
+func (c *Client) BatchGetOrder(ctx context.Context,
+	packageName string,
+	orderIds ...string,
+) (*androidpublisher.BatchGetOrdersResponse, error) {
+	ps := androidpublisher.NewOrdersService(c.service)
+	result, err := ps.Batchget(packageName).OrderIds(orderIds...).Context(ctx).Do()
+
+	return result, err
 }
