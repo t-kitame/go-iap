@@ -1,4 +1,4 @@
-module github.com/Zhang-MQ/go-iap
+module github.com/awa/go-iap
 
 go 1.24
 
